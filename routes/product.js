@@ -1,12 +1,14 @@
 const Product = require("../models/Product");
-
-const { verifyTokenAndAdmin } = require("./verifyToken");
+const {
+  verifyToken,
+  verifyTokenAndAuthorization,
+  verifyTokenAndAdmin,
+} = require("./verifyToken");
 
 const router = require("express").Router();
 
-module.exports = router;
+//CREATE
 
-// CREATE PRODUCT
 router.post("/", verifyTokenAndAdmin, async (req, res) => {
   const newProduct = new Product(req.body);
 
@@ -18,7 +20,7 @@ router.post("/", verifyTokenAndAdmin, async (req, res) => {
   }
 });
 
-//UPDATE PRODUCT
+//UPDATE
 router.put("/:id", verifyTokenAndAdmin, async (req, res) => {
   try {
     const updatedProduct = await Product.findByIdAndUpdate(
@@ -26,9 +28,7 @@ router.put("/:id", verifyTokenAndAdmin, async (req, res) => {
       {
         $set: req.body,
       },
-      {
-        new: true,
-      }
+      { new: true }
     );
     res.status(200).json(updatedProduct);
   } catch (err) {
@@ -36,12 +36,11 @@ router.put("/:id", verifyTokenAndAdmin, async (req, res) => {
   }
 });
 
-// DELETE PRODUCT
 //DELETE
 router.delete("/:id", verifyTokenAndAdmin, async (req, res) => {
   try {
     await Product.findByIdAndDelete(req.params.id);
-    res.status(200).json("Product has been deleted!");
+    res.status(200).json("Product has been deleted...");
   } catch (err) {
     res.status(500).json(err);
   }

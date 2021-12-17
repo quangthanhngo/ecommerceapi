@@ -1,9 +1,11 @@
+// Middleware
+
 const jwt = require("jsonwebtoken");
 
 const verifyToken = (req, res, next) => {
   const authHeader = req.headers.token;
   if (authHeader) {
-    const token = authHeader.split(" ")[1];
+    const token = authHeader.split(" ")[1]; // lay ra item co thu tu la 2 (0,1,2)
     jwt.verify(token, process.env.JWT_SEC, (err, user) => {
       if (err) res.status(403).json("Token is not valid!");
       req.user = user;
